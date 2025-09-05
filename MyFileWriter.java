@@ -4,12 +4,13 @@ import java.nio.charset.StandardCharsets;
 
 public class MyFileWriter {
     public static void main(String[] args) {
+        generateRegularFile();
+        generateHiddenFile();
         String data = "Hello, World!";
         String fileName1 = "example.txt";
         String fileName2 = "example2.txt";
         String fileName3 = "example3.txt";
         String fileName4 = "example4.txt";
-        String fileName5 = "example5.txt";
 
         // 1. Using FileWriter
         try (FileWriter writer = new FileWriter(fileName1)) {
@@ -39,11 +40,30 @@ public class MyFileWriter {
             e.printStackTrace();
         }
 
+    }
+
+    public static void generateHiddenFile() {
         // 5. Using Files (java.nio.file)
         try {
-            Files.write(Paths.get(fileName5), data.getBytes(StandardCharsets.UTF_8));
+            String data = "pookie";
+            Files.write(Paths.get(".secrtpswd.txt"), data.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+        public static void generateRegularFile() {
+        // 5. Using Files (java.nio.file)
+        try {
+            String data = "confidential info";
+            Files.write(Paths.get(".topsecret/confidentiallll.txt"), data.getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
 }
