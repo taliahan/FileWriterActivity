@@ -1,6 +1,12 @@
 import java.io.*;
 import java.nio.file.*;
 import java.nio.charset.StandardCharsets;
+import java.io.IOException;
+import java.nio.file.FileStore;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 public class MyFileWriter {
     public static void main(String[] args) {
@@ -40,6 +46,8 @@ public class MyFileWriter {
             e.printStackTrace();
         }
 
+        printFileSize("example5.txt");
+
     }
 
     public static void generateHiddenFile() {
@@ -62,8 +70,10 @@ public class MyFileWriter {
         }
     }
 
-
-
-
+    // Calculate and print the file size using the File class
+    private static void printFileSize(String fileName) {
+        File f = new File(fileName);
+        System.out.println(f.getTotalSpace());
+        }
 
 }
