@@ -1,7 +1,6 @@
 import java.io.*;
 import java.nio.file.*;
 import java.nio.charset.StandardCharsets;
-import java.io.IOException;
 import java.nio.file.FileStore;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,6 +46,13 @@ public class MyFileWriter {
         }
 
         printFileSize("example5.txt");
+        try {
+            System.out.println(stringify("example5.txt"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+       
 
     }
 
@@ -60,7 +66,7 @@ public class MyFileWriter {
         }
     }
 
-        public static void generateRegularFile() {
+    public static void generateRegularFile() {
         // 5. Using Files (java.nio.file)
         try {
             String data = "confidential info";
@@ -73,7 +79,26 @@ public class MyFileWriter {
     // Calculate and print the file size using the File class
     private static void printFileSize(String fileName) {
         File f = new File(fileName);
-        System.out.println(f.getTotalSpace());
-        }
+        System.out.println(f.length());
+    }
+
+
+
+
+
+/**
+* Reads a text file and returns its contents as a string.
+* 
+* @param filePath the path to the file
+* @return the contents of the file as a string
+* @throws IOException if an I/O error occurs
+*/
+public static String stringify(String filePath) throws IOException {
+    Path filePathh = Paths.get(filePath);
+    String content = Files.readString(filePathh);
+    return content;
+}
+
+
 
 }
