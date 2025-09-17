@@ -8,52 +8,60 @@ import java.nio.file.Paths;
 
 
 public class MyFileWriter {
-    public static void main(String[] args) {
-        generateRegularFile();
-        generateHiddenFile();
-        String data = "Hello, World!";
-        String fileName1 = "example.txt";
-        String fileName2 = "example2.txt";
-        String fileName3 = "example3.txt";
-        String fileName4 = "example4.txt";
+    public static void main(String[] args) throws IOException {
+        // generateRegularFile();
+        // generateHiddenFile();
+        // String data = "Hello, World!";
+        // String fileName1 = "example.txt";
+        // String fileName2 = "example2.txt";
+        // String fileName3 = "example3.txt";
+        // String fileName4 = "example4.txt";
 
-        // 1. Using FileWriter
-        try (FileWriter writer = new FileWriter(fileName1)) {
-            writer.write(data);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // // 1. Using FileWriter
+        // try (FileWriter writer = new FileWriter(fileName1)) {
+        //     writer.write(data);
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        // }
 
-        // 2. Using BufferedWriter
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName2))) {
-            bufferedWriter.write(data);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // // 2. Using BufferedWriter
+        // try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName2))) {
+        //     bufferedWriter.write(data);
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        // }
 
-        // 3. Using FileOutputStream
-        try (FileOutputStream outputStream = new FileOutputStream(fileName3)) {
-            outputStream.write(data.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // // 3. Using FileOutputStream
+        // try (FileOutputStream outputStream = new FileOutputStream(fileName3)) {
+        //     outputStream.write(data.getBytes());
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        // }
 
-        // 4. Using BufferedOutputStream
-        try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(fileName4))) {
-            bufferedOutputStream.write(data.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // // 4. Using BufferedOutputStream
+        // try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(fileName4))) {
+        //     bufferedOutputStream.write(data.getBytes());
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        // }
 
-        printFileSize("example5.txt");
-        try {
-            System.out.println(stringify("example5.txt"));
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        // printFileSize("example5.txt");
+        // try {
+        //     System.out.println(stringify("example5.txt"));
+        // } catch (IOException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
        
+        File file1 = new File("file1.txt");
+        File file2 = new File("file2.txt");
+        File file3 = new File("file3.txt");
 
+        Files.writeString(file1.toPath(), "Hellur");
+        Files.writeString(file2.toPath(), "My name is ellikakaka");
+        Files.writeString(file3.toPath(), "bababooey went to topics class and cried");
+
+        printFileSize("file1.txt", "file2.txt", "file3.txt" , "smush.txt");
     }
 
     public static void generateHiddenFile() {
@@ -77,11 +85,16 @@ public class MyFileWriter {
     }
 
     // Calculate and print the file size using the File class
-    private static void printFileSize(String fileName) {
-        File f = new File(fileName);
-        System.out.println(f.length());
+    private static void printFileSize(String... fileNames) {
+    long totalSize = 0;
+    for (String fileName : fileNames) {
+        File file = new File(fileName);
+        if (file.exists()) {
+            totalSize += file.length();
+        }
     }
-
+    System.out.println("Total size of all files: " + totalSize + " bytes");
+}
 
 
 
