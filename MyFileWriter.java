@@ -71,7 +71,10 @@ public class MyFileWriter {
             String h2 = hashFile("file2.txt");
             System.out.println("Hash of file1.txt: " + h1);
             System.out.println("Hash of file2.txt: " + h2);
-
+            testHashFileEmptyFiles();
+            testHashFileLargeFiles();
+            testHashFileSpecialChars();
+            testHashFileNonExistent();
     }
 
     public static void generateHiddenFile() {
@@ -162,6 +165,74 @@ public static String stringify(String filePath) throws IOException {
         }
         return null;
     }
+
+
+    // empty file test
+    // expected hash: e3b0c442... (the known empty sha256)
+    // got the same when I ran it---> pass
+
+    public static void testHashFileEmptyFiles() throws IOException {
+        // creates a 0-byte empty file
+        Path emptyFile = Paths.get("emptyTest.txt");
+        Files.write(emptyFile, new byte[0]);
+
+        // hashes the empty file
+        String hash = hashFile("emptyTest.txt");
+
+        // known SHA-256 hash of an empty file (verified online)
+        String expected = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+
+        System.out.println("Empty file hash: " + hash);
+        System.out.println("Matches expected? " + hash.equals(expected));
+    }
+
+    // large file test
+    // made a file with 100k lines, hash ran fine, didn’t crash ; pass
+public static void testHashFileLargeFiles() throws IOException {
+    // making a LARGEE test file
+    Path largeFile = Paths.get("largeTest.txt");
+    StringBuilder stringBuild = new StringBuilder();
+
+    for (int i = 0; i < 100000; i++) {
+        stringBuild.append("bababoey.\n");
+    }
+    Files.writeString(largeFile, stringBuild.toString());
+
+    // Hash the large file
+    String hash = hashFile("largeTest.txt");
+
+    System.out.println("Hash of large file: " + hash);
+}
+
+
+// special chars test
+// file had chinese, arabic, hebrew, emoji ; hash came out length 64 → pass
+
+public static void testHashFileSpecialChars() throws IOException {
+    // making a file with with non-ASCII content 
+    Path specialFile = Paths.get("specialTest.txt");
+    Files.writeString(specialFile, "你好世界 🚀 مرحبا بالعالمשלום עולם");
+
+    // hashing the file
+    String hash = hashFile("specialTest.txt");
+
+    System.out.println("Special chars file hash: " + hash);
+    System.out.println("Pass? " + (hash != null && hash.length() == 64));
+
+}
+
+
+// non-existent file test
+// tried to hash a file that doesn’t exist, got error + null ; pass
+
+public static void testHashFileNonExistent() {
+    String result = hashFile("no_such_file.txt");
+
+    // should get FileNotFoundException, so should return 
+    System.out.println("Non-existent file test: " + (result == null));
+}
+
+
 
 
 
