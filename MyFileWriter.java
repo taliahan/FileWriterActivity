@@ -5,10 +5,14 @@ import java.nio.file.FileStore;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 public class MyFileWriter {
     public static void main(String[] args) throws IOException {
+
+
         // generateRegularFile();
         // generateHiddenFile();
         // String data = "Hello, World!";
@@ -61,7 +65,13 @@ public class MyFileWriter {
         Files.writeString(file2.toPath(), "My name is ellikakaka");
         Files.writeString(file3.toPath(), "bababooey went to topics class and cried");
 
-        printFileSize("file1.txt", "file2.txt", "file3.txt" , "smush.txt");
+        printFileSize("file1.txt", "file2.txt", "file3.txt", "smush.txt");
+        
+            String h1 = hashFile("file1.txt");
+            String h2 = hashFile("file2.txt");
+            System.out.println("Hash of file1.txt: " + h1);
+            System.out.println("Hash of file2.txt: " + h2);
+
     }
 
     public static void generateHiddenFile() {
@@ -111,6 +121,47 @@ public static String stringify(String filePath) throws IOException {
     String content = Files.readString(filePathh);
     return content;
 }
+
+
+
+    
+    public static String hashFile(String filePath) {
+        try {
+            // info on message digest: https://docs.oracle.com/javase/8/docs/api/java/security/MessageDigest.html
+            MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+
+            // Read file in chunks of 1024 bytes using fileinputstream: https://docs.oracle.com/javase/8/docs/api/java/io/FileInputStream.html and a buffer byte array: https://docs.oracle.com/javase/tutorial/essential/io/file.html
+
+            try (InputStream fileInputS = new FileInputStream(filePath)) {
+                byte[] temporary = new byte[1024];
+                int numberBytes = fileInputS.read(temporary);
+                while (numberBytes != -1) {
+                    sha256.update(temporary, 0, numberBytes);
+                    numberBytes = fileInputS.read(temporary);
+                }
+
+                // finalizing hash
+                byte[] hashBytes = sha256.digest();
+
+                // convert bytes to readable hex string: https://www.baeldung.com/sha-256-hashing-java
+
+                StringBuilder str = new StringBuilder();
+                for (byte b : hashBytes) {
+                    String hex = String.format("%02x", b);
+                    str.append(hex);
+                }
+                return str.toString();
+            }
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Error: File not found -> " + filePath);
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            System.err.println("Error: SHA-256 algorithm not available.");
+        }
+        return null;
+    }
 
 
 
